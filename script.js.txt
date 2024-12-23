@@ -1,0 +1,51 @@
+// script.js
+let score = 0;
+let currentQuestion = {};
+let operations = ["+", "-", "*", "/"];
+
+// Genera una nueva pregunta
+function generateQuestion() {
+  const num1 = Math.floor(Math.random() * 10) + 1;
+  const num2 = Math.floor(Math.random() * 10) + 1;
+  const operation = operations[Math.floor(Math.random() * operations.length)];
+  
+  let correctAnswer;
+  if (operation === "+") {
+    correctAnswer = num1 + num2;
+  } else if (operation === "-") {
+    correctAnswer = num1 - num2;
+  } else if (operation === "*") {
+    correctAnswer = num1 * num2;
+  } else if (operation === "/") {
+    correctAnswer = parseFloat((num1 / num2).toFixed(2)); // Redondear a 2 decimales
+  }
+
+  currentQuestion = { num1, num2, operation, correctAnswer };
+  document.getElementById("question").textContent = `¿Cuánto es ${num1} ${operation} ${num2}?`;
+}
+
+// Verifica la respuesta del usuario
+function checkAnswer() {
+  const userAnswer = parseFloat(document.getElementById("answer").value);
+  const feedback = document.getElementById("feedback");
+
+  if (userAnswer === currentQuestion.correctAnswer) {
+    score++;
+    feedback.textContent = "¡Correcto!";
+    feedback.style.color = "green";
+  } else {
+    feedback.textContent = `Incorrecto. La respuesta correcta era ${currentQuestion.correctAnswer}.`;
+    feedback.style.color = "red";
+  }
+
+  document.getElementById("answer").value = "";
+  document.getElementById("score").textContent = `Puntaje: ${score}`;
+  generateQuestion();
+}
+
+// Evento de inicio
+document.getElementById("submit-btn").addEventListener("click", checkAnswer);
+
+// Inicializar el quiz
+generateQuestion();
+
